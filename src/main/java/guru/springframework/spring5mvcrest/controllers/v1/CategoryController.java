@@ -3,7 +3,6 @@ package guru.springframework.spring5mvcrest.controllers.v1;
 import guru.springframework.spring5mvcrest.api.v1.model.CategoryDTO;
 import guru.springframework.spring5mvcrest.api.v1.model.CategoryListDTO;
 import guru.springframework.spring5mvcrest.services.CategoryService;
-import jdk.jfr.Category;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +18,8 @@ public class CategoryController {
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
+
+
 
     @GetMapping
     public ResponseEntity<CategoryListDTO> getAllCategories(){
