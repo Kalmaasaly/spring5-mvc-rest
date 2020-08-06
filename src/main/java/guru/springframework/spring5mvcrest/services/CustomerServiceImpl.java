@@ -55,4 +55,17 @@ public class CustomerServiceImpl implements CustomerService {
         customerDTO1.setCustomerUrl("api/v1/customers/" + customer1.getId());
         return customerDTO;
     }
+
+    @Override
+    public CustomerDTO patchCustomerDto(Long id, CustomerDTO customerDTO) {
+        return customerRepository.findById(id).map(customer -> {
+            if(customerDTO.getFirstname() !=null){
+                customer.setFirstName(customerDTO.getFirstname());
+            }
+            if (customerDTO.getLastname() !=null){
+                customer.setLastName(customerDTO.getLastname());
+            }
+            return customerMapper.customerToCustomerDto(customer);
+        }).orElseThrow(RuntimeException::new);
+    }
 }
