@@ -10,4 +10,6 @@ public interface CustomerService {
     List<CustomerDTO> getAllCustomers();
 
     CustomerDTO getCustomerByFirstName(String firstname);
+    CustomerDTO createNewCustomer(CustomerDTO customerDTO);
+    CustomerDTO saveCustomerDto(Long id,CustomerDTO customerDTO);
 }
