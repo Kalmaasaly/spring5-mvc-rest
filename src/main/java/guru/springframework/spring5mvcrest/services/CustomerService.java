@@ -9,8 +9,10 @@ import java.util.List;
 public interface CustomerService {
     List<CustomerDTO> getAllCustomers();
 
-    CustomerDTO getCustomerByFirstName(String firstname);
+    //CustomerDTO getCustomerByFirstname(String firstname);
     CustomerDTO createNewCustomer(CustomerDTO customerDTO);
     CustomerDTO saveCustomerDto(Long id,CustomerDTO customerDTO);
     CustomerDTO patchCustomerDto(Long id,CustomerDTO customerDTO);
+    void deleteCustomerById(Long id);
+    CustomerDTO getCustomerById(Long id);
 }

@@ -1,6 +1,7 @@
 package guru.springframework.spring5mvcrest.controllers.v1;
 
 import guru.springframework.spring5mvcrest.api.v1.model.CustomerDTO;
+import guru.springframework.spring5mvcrest.controllers.RestResponseEntityExceptionHandler;
 import guru.springframework.spring5mvcrest.domain.Customer;
 import guru.springframework.spring5mvcrest.services.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +12,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
+import static org.mockito.Mockito.any;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,11 +20,11 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.mockito.Mockito.any;
+
 class CustomerControllerTest {
 
     public static String FIRST_NAME = "firstname1";
@@ -40,7 +41,9 @@ class CustomerControllerTest {
     @BeforeEach
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(customerController)
+                .setControllerAdvice(new RestResponseEntityExceptionHandler())
+                .build();
     }
 
     @Test
@@ -62,20 +65,20 @@ class CustomerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.customers",hasSize(2)));
     }
-    @Test
+/*    @Test
     public void testCustomerByName() throws Exception {
         CustomerDTO customer1 = new CustomerDTO();
        // customer1.setId(1l);
         customer1.setFirstname(FIRST_NAME);
         customer1.setLastname(LAST_NAME);
-        when(customerService.getCustomerByFirstName(anyString())).thenReturn(customer1);
+        when(customerService.getCustomerByFirstname(anyString())).thenReturn(customer1);
 
         mockMvc.perform(get("/api/v1/customers/Joe")
-                .param("firstName",FIRST_NAME)
+                .param("firstname",FIRST_NAME)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstname").value((FIRST_NAME)));
-    }
+    }*/
     @Test
     public void createNewCustomer() throws Exception {
         // given
@@ -119,6 +122,16 @@ class CustomerControllerTest {
                 .andExpect(jsonPath("$.firstname", equalTo(FIRST_NAME)))
                 .andExpect(jsonPath("$.lastname", equalTo(LAST_NAME)))
                 .andExpect(jsonPath("$.customer_url", equalTo(CustomerController.BASE_URL + "/1")));
+    }
+
+    @Test
+    public void testDeleteCustomer() throws Exception {
+        mockMvc.perform(delete(CustomerController.BASE_URL + "/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(customerService).deleteCustomerById(anyLong());
+
     }
 
 

@@ -8,10 +8,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@RequestMapping("/api/v1/categories/")
+import java.util.List;
+
+@RestController
+@RequestMapping(CategoryController.BASE_URL)
 public class CategoryController {
+
+    public static final String BASE_URL = "/api/v1/categories";
 
     private final CategoryService categoryService;
 
@@ -22,12 +28,13 @@ public class CategoryController {
 
 
     @GetMapping
-    public ResponseEntity<CategoryListDTO> getAllCategories(){
-        return new ResponseEntity<>(
-                new CategoryListDTO(categoryService.getAllCategories()),HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public CategoryListDTO  getAllCategories(){
+        return new CategoryListDTO(categoryService.getAllCategories());
     }
-    @GetMapping("{name}")
-    public ResponseEntity<CategoryDTO> getCategoryByName(String name){
-        return new ResponseEntity<CategoryDTO>(categoryService.getCategoryName(name),HttpStatus.OK);
+    @GetMapping("/{name}")
+    @ResponseStatus(HttpStatus.OK)
+    public CategoryDTO getCategoryByName(String name){
+        return categoryService.getCategoryName(name);
     }
 }
