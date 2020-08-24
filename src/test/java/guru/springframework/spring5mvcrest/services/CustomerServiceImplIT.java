@@ -6,6 +6,7 @@ import guru.springframework.spring5mvcrest.bootstrap.Bootstrap;
 import guru.springframework.spring5mvcrest.domain.Customer;
 import guru.springframework.spring5mvcrest.repositories.CategoryRepository;
 import guru.springframework.spring5mvcrest.repositories.CustomerRepository;
+import guru.springframework.spring5mvcrest.repositories.VendorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -29,12 +30,15 @@ class CustomerServiceImplIT {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    VendorRepository vendorRepository;
+
     CustomerService customerService;
 
 
     @BeforeEach
     void setUp() throws Exception {
-        Bootstrap bootstrap=new Bootstrap(categoryRepository,customerRepository);
+        Bootstrap bootstrap=new Bootstrap(categoryRepository,customerRepository, vendorRepository);
         bootstrap.run();
 
          customerService=new CustomerServiceImpl(CustomerMapper.INSTANCE,customerRepository);
